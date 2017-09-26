@@ -35,5 +35,15 @@ public class OpenSettings extends ReactContextBaseJavaModule {
         i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         reactContext.startActivity(i);
     }
+
+    @ReactMethod
+    public void openLocationSettings() {
+        final Intent i = new Intent();
+        i.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        reactContext.startActivity(i);
+    }
     //endregion
 }
