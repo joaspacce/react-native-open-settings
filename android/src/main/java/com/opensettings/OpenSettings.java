@@ -1,8 +1,10 @@
 package com.opensettings;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.Settings;
+import android.util.Log;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
@@ -11,6 +13,8 @@ import com.facebook.react.bridge.ReactMethod;
 
 public class OpenSettings extends ReactContextBaseJavaModule {
 
+
+    private static final String TAG = OpenSettings.class.getSimpleName();
     private ReactContext reactContext;
 
     public OpenSettings(ReactApplicationContext reactContext) {
@@ -23,7 +27,6 @@ public class OpenSettings extends ReactContextBaseJavaModule {
         return "RNOpenSettings";
     }
 
-    //region React Native Methods
     @ReactMethod
     public void openSettings() {
         final Intent i = new Intent();
@@ -45,5 +48,23 @@ public class OpenSettings extends ReactContextBaseJavaModule {
         i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         reactContext.startActivity(i);
     }
-    //endregion
+
+    @ReactMethod
+    public void openAirPlaneModeSettings() {
+        try {
+            Intent intent = new Intent(android.provider.Settings.ACTION_AIRPLANE_MODE_SETTINGS);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            reactContext.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            try {
+                Intent intent = new Intent("android.settings.WIRELESS_SETTINGS");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                reactContext.startActivity(intent);
+            } catch (ActivityNotFoundException ex) {
+                Log.e(TAG, "Not able to set airplane mode");
+
+            }
+        }
+    }
+
 }
